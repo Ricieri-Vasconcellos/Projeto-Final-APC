@@ -4,7 +4,7 @@
 #include <windows.h> // Para funções Windows (Clipboard, caminhos)
 #include <time.h>    // Para srand()/rand()
 #include <ctype.h>   // Para isspace(), isxdigit()
-#include <stdint.h>  // Para tipos inteiros fixos (opcional)
+#include <stdint.h>  // Para tipos inteiros fixos
 
 // ============================================================
 // Macros
