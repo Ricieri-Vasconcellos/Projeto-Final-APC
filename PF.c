@@ -347,7 +347,6 @@ void RandomPassword(char *senha)
 void Salva_txt(const char *saida)
 {
     char nome[256];
-    // clear_stdin();  // já controlado pelo chamador
 
     printf("Nome do arquivo: ");
 
