@@ -31,27 +31,37 @@ void Salva_txt(const char *saida);                                              
 // ============================================================
 
 // Limpa o buffer de entrada (stdin) até encontrar nova linha ou EOF(end of file)
+
 static void clear_stdin(void)
 {
     int c;
-    while ((c = getchar()) != '\n' && c != EOF)
-        ; // Remove caracteres restantes do buffer
+    // Remove caracteres restantes do buffer
+    do
+    {
+        c = getchar();
+    } while (c != '\n' && c != EOF);
 }
 
 // Remove espaços em branco do início e fim de uma string
 static void trim_inplace(char *s)
 {
-    if (!s)
-        return; // Verifica se a string não é NULL
+    if (s == NULL) // Verifica se a string não é NULL
+    {
+        return;
+    }
 
     // Remove espaços do início
     char *start = s;
     while (*start && isspace((unsigned char)*start))
-        start++;
+    {
+        start++; // Vai indo para a proxima memoria (Ex: se está no s[0] vai pro s[1])
+    }
 
     // Move a string para o início se necessário
     if (start != s)
-        memmove(s, start, strlen(start) + 1);
+    {
+        memmove(s, start, strlen(start) + 1); // Move a string da posição "start" para a posição inicial "s" e o strelen +1 para incluir o \0
+    }
 
     // Remove espaços do final
     size_t len = strlen(s);
@@ -67,8 +77,10 @@ static void inputs_base(char *entrada, size_t entrada_max, char *senha, size_t s
 {
     // Recebe a senha
     printf("Digite a senha de 1-%lu caracteres: ", (unsigned long)(senha_max - 1));
-    if (!fgets(senha, (int)senha_max, stdin))
+    if (fgets(senha, senha_max, stdin) == NULL)
+    {
         senha[0] = '\0'; // Em caso de erro
+    }
 
     senha[strcspn(senha, "\n")] = '\0'; // Remove \n do final
     trim_inplace(senha);                // Remove espaços extras
@@ -80,8 +92,10 @@ static void inputs_base(char *entrada, size_t entrada_max, char *senha, size_t s
     else
         printf("Cole o texto criptografado (ate %lu chars): ", (unsigned long)(entrada_max - 1));
 
-    if (!fgets(entrada, (int)entrada_max, stdin))
+    if (fgets(entrada, (int)entrada_max, stdin) == NULL)
+    {
         entrada[0] = '\0';
+    }
 
     entrada[strcspn(entrada, "\n")] = '\0';
     trim_inplace(entrada);
@@ -119,15 +133,15 @@ int main()
         system("cls"); // Limpa tela
 
         // Interface do menu com cores (códigos ANSI)
-        printf("\033[1;36m====== SISTEMA DE CRIPTOGRAFIA ======\033[0m\n\n");
-        printf("\033[1;33m-------- MENU --------\033[0m\n\n");
+        printf("\033[1;36m====== SISTEMA DE CRIPTOGRAFIA ======\033[0m\n\n"); // \033 é o esc no 1;36 o 1 é o estilo(regular/bold/italico) e o segundo numero é a cor e o "m" fecha a configuração
+        printf("\033[1;33m-------- MENU --------\033[0m\n\n");                // o [0m reseta para a configuração padrão
         printf("\033[1;32m1\033[0m. Criptografar um texto\n");
         printf("\033[1;32m2\033[0m. Descriptografar um texto\n");
         printf("\033[1;32m3\033[0m. Gerar uma senha\n");
         printf("\033[1;32m4\033[0m. Sair do programa\n\n");
 
         printf("Escolha uma opcao: ");
-        if (scanf("%d", &op) != 1) // Lê opção
+        if (scanf("%d", &op) == 0)
         {
             printf("Entrada invalida!\n");
             clear_stdin();
@@ -269,7 +283,9 @@ void descriptografar(const char *criptografado, const char *senha, char *saida)
 
         // Verifica limite do buffer
         if (k + 1 >= MAX_1)
+        {
             break;
+        }
 
         // Aplica XOR reverso usando a mesma senha
         saida[k] = (char)(x ^ (unsigned char)senha[k % tam_psw]);
@@ -278,9 +294,13 @@ void descriptografar(const char *criptografado, const char *senha, char *saida)
 
     // Termina string
     if (k < MAX_1)
+    {
         saida[k] = '\0';
+    }
     else
+    {
         saida[MAX_1 - 1] = '\0';
+    }
 }
 
 // ============================================================
@@ -303,8 +323,9 @@ void RandomPassword(char *senha)
         }
 
         if (tam_psw >= 1 && tam_psw <= (MAX_PASSWORD - 1))
+        {
             break;
-
+        }
         printf("Valor invalido!\n");
 
     } while (1);
@@ -314,7 +335,9 @@ void RandomPassword(char *senha)
     // Cria array com caracteres ASCII imprimíveis (33 a 126)
     char ascii[94];
     for (int i = 0; i < 94; i++)
+    {
         ascii[i] = (char)(33 + i);
+    }
 
     // Embaralha o array usando Fisher-Yates(Todas as permutações tem mesma probabilidade)
     for (int i = 93; i > 0; i--)
@@ -357,7 +380,9 @@ void Salva_txt(const char *saida)
     trim_inplace(nome);
 
     if (strlen(nome) == 0)
+    {
         strcpy(nome, "output");
+    }
 
     // Adiciona extensão .txt
     char nome_f[300];
@@ -387,18 +412,24 @@ void Salva_txt(const char *saida)
 // ============================================================
 void Copy_to_clipboard(const char *str)
 {
-    if (!str)
+    if (str == NULL)
+    {
         return;
+    }
 
     // Converte de UTF-8 para wide string (Unicode)
     int wlen = MultiByteToWideChar(CP_UTF8, 0, str, -1, NULL, 0);
     if (wlen == 0)
+    {
         return;
+    }
 
-    // Aloca memória global (requisito do Windows Clipboard)
+    // Aloca memória global (requisito do Windows para o Clipboard)
     HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, (SIZE_T)wlen * sizeof(wchar_t));
     if (!hMem)
+    {
         return;
+    }
 
     wchar_t *pw = (wchar_t *)GlobalLock(hMem);
     if (!pw)
@@ -419,6 +450,7 @@ void Copy_to_clipboard(const char *str)
     }
 
     EmptyClipboard();
+
     // SetClipboardData toma posse do bloco de memória (não liberar depois)
     SetClipboardData(CF_UNICODETEXT, hMem);
     CloseClipboard();
