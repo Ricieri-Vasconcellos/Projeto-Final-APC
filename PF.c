@@ -78,7 +78,7 @@ static void inputs_base(char *entrada, size_t entrada_max, char *senha, size_t s
     if (!modo_hex)
         printf("Digite o texto de 1-%lu caracteres: ", (unsigned long)(entrada_max - 1));
     else
-        printf("Cole o texto criptografado (até %lu chars): ", (unsigned long)(entrada_max - 1));
+        printf("Cole o texto criptografado (ate %lu chars): ", (unsigned long)(entrada_max - 1));
 
     if (!fgets(entrada, (int)entrada_max, stdin))
         entrada[0] = '\0';
