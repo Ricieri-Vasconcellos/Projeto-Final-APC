@@ -118,6 +118,8 @@ void inputs_hex(char *entrada, char *senha)
 // ============================================================
 int main()
 {
+    SetConsoleTitle("Sistema de Criptografia");
+
     srand((unsigned)time(NULL)); // Inicializa gerador de números aleatórios
 
     // Buffers para armazenar dados
