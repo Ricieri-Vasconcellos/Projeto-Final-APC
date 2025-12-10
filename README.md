@@ -17,7 +17,7 @@ O foco do trabalho é demonstrar conceitos de manipulação de strings e manipul
 ## 🛠 Tecnologias e Ferramentas Usadas
 
 - Linguagem: **C**
-- Compilador: gcc (ou outro compatível com C99/C11)  
+- Compilador: gcc
 - Sistema operacional: Windows
 - Editor/IDE: VSCode
 
