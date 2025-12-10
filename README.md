@@ -16,7 +16,7 @@ O foco do trabalho é demonstrar conceitos de manipulação de strings e manipul
 
 ## 🛠 Tecnologias e Ferramentas Usadas
 
-- Linguagem: **C** :contentReference[oaicite:0]{index=0}  
+- Linguagem: **C**
 - Compilador: gcc (ou outro compatível com C99/C11)  
 - Sistema operacional: Windows
 - Editor/IDE: VSCode
